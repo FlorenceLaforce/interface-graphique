@@ -9,22 +9,20 @@ class Calculatrice(tk.Tk):
         self.creer_widgets()
 
     def creer_widgets(self):
-        frame1 = tk.Frame(self, bg="red") #gros frame toute la page
-        frame1.pack(fill="both", expand = True)
 
-        frame2 = tk.Frame(frame1, bg="green") #frame pour ecran calculatrice
+        frame2 = tk.Frame(bg="green") #frame pour ecran calculatrice
         frame2.pack(side="top", fill="x", padx =10, pady = 10, expand = True, anchor = "n")
 
-        frame3 = tk.Frame(frame1,bg="blue") # bouton dedans
+        frame3 = tk.Frame(bg="blue") # bouton dedans
         frame3.pack(side="top", fill="both", expand = True, anchor = "n")
 
-        frame4 = tk.Frame(frame3, bg="orange") #1er ligne bouton
+        frame4 = tk.Frame(bg="orange") #1er ligne bouton
         frame4.pack(side="bottom", fill="x", expand = True)
 
-        frame5 = tk.Frame(frame4, bg="red")
+        frame5 = tk.Frame(bg="red")
         frame5.pack(side="bottom", fill="x", expand = True)
 
-        frame6 = tk.Frame(frame4, bg="green")
+        frame6 = tk.Frame(bg="green")
         frame6.pack(side="bottom", fill="x", expand = True)
 
 
