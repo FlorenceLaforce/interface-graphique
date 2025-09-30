@@ -30,6 +30,8 @@ class interface(tk.Tk):
 
         durer = tk.Label(content, text = "Durée estimée de la tâche en minutes:")
         durer.grid(row=2, column=0, sticky="w", padx=10, pady=10)
+        self.champ_tache2 = tk.Entry(content)
+        self.champ_tache2.grid(row=2, column=1, sticky="ew", padx=10, pady=10)
 
         self.prioritaire = tk.BooleanVar(value=False)
         self.cb_prioritaire = tk.Checkbutton(content, text = "Toutes les nouvelles tâche sont prioritaires:", variable=self.prioritaire)
@@ -45,6 +47,9 @@ class interface(tk.Tk):
 
         self.bnt_ajouter = tk.Button(content, text = "Ajouter la tâche")
         self.bnt_ajouter.grid(row = 6, column = 0,columnspan=2, pady = 30)
+
+        self.liste_tache = tk.Listbox(content, height = 15)
+        self.liste_tache.grid(row = 7, column = 0, columnspan = 2,sticky = "nsew",padx = 10,pady = 10)
 
 
 
