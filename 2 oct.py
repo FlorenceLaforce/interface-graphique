@@ -25,6 +25,9 @@ class interface(tk.Tk):
 
         frm.rowconfigure(2, weight=1)
 
+        frm2 = tk.Frame(self, bg="lightcoral")
+        frm2.grid(row=3, column=0, sticky="nsew")
+
         nom = tk.Label(frm, text="Nom")
         nom.grid(row=0, column=0, sticky="w", padx=20, pady=10)
 
