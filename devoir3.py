@@ -74,6 +74,7 @@ class interface(tk.Tk):
 
         entry_montant = tk.Label(lbl_frm_montants, textvariable=self.affichage_random, width = 10, bg = "white")
         entry_montant.grid(row=0, column=0, sticky="w", pady=5, padx=10)
+        self.entry_montant = entry_montant
 
         self.btn_random = tk.Button(lbl_frm_montants, text = "Random", width=10, command=self.random)
         self.btn_random.grid(row=1, column=0, sticky="w", padx=10, pady=5)
@@ -86,22 +87,23 @@ class interface(tk.Tk):
         btn_radio = tk.Radiobutton(lbl_frm_montants, text="100 à 1000", variable=self.civ, value="C")
         btn_radio.grid(row=2, column=1, sticky="w", padx=10)
 
-        self.btn_depo = tk.Button(frm2, text = "Déposer", width=10)
+        self.btn_depo = tk.Button(frm2, text = "Déposer", width=10, command=self.deposer)
         self.btn_depo.grid(row=0, column=0, padx=(10,40), pady=5)
 
-        self.btn_retirer = tk.Button(frm2, text = "Retirer", width = 10)
+        self.btn_retirer = tk.Button(frm2, text = "Retirer", width = 10, command=self.retirer)
         self.btn_retirer.grid(row=0, column=1, padx=40, pady=5)
 
-        self.btn_vider = tk.Button(frm2, text="Vider", width=10)
+        self.btn_vider = tk.Button(frm2, text="Vider", width=10, command=self.vider)
         self.btn_vider.grid(row=0, column=2, padx=40, pady=5)
 
-        self.btn_reset = tk.Button(frm2, text = "Reset", width=10)
+        self.btn_reset = tk.Button(frm2, text = "Reset", width=10, command=self.reset)
         self.btn_reset.grid(row=0, column=3, padx=(40,10), pady=5)
 
         self.gelables = [
             self.entry_num,
             self.entry_detenteur,
             self.btn_random,
+            self.entry_montant,
         ]
 
         for child in lbl_frm_montants.winfo_children():
@@ -146,17 +148,108 @@ class interface(tk.Tk):
         # mettre à jour l'entry (label) du montant
         self.affichage_random.set(str(val))
 
+    def deposer(self):
+        num, det = self.obtenir_paire()
+
+        # validations préalables
+        if not self.valider_numero(num):
+            messagebox.showerror("Erreur", "Numéro invalide : doit contenir exactement 5 chiffres.")
+            return
+        if not self.valider_detenteur(det):
+            messagebox.showerror("Erreur", "Détenteur invalide : doit contenir au moins 5 lettres.")
+            return
+        montant_txt = self.affichage_random.get().strip()
+        if montant_txt == "":
+            messagebox.showerror("Erreur", "Aucun montant. Appuyez sur Random ou entrez un montant via Random.")
+            return
+        try:
+            montant = float(montant_txt)
+            if montant <= 0:
+                raise ValueError()
+        except ValueError:
+            messagebox.showerror("Erreur", "Montant invalide.")
+            return
+
+        # si existe, incrémenter, sinon créer le compte
+        cle = (num, det)
+        if cle in self.comptes:
+            self.comptes[cle] += montant
+        else:
+            self.comptes[cle] = montant
+
+        # mise à jour de l'affichage solde
+        self.mettre_a_jour_solde_affichage(num, det)
+        messagebox.showinfo("Succès", f"Dépôt effectué : {montant:.2f}.\nSolde actuel : {self.comptes[cle]:.2f}")
+
+    def retirer(self):
+        num, det = self.obtenir_paire()
+
+        # validations
+        if not self.valider_numero(num):
+            messagebox.showerror("Erreur", "Numéro invalide : doit contenir exactement 5 chiffres.")
+            return
+        if not self.valider_detenteur(det):
+            messagebox.showerror("Erreur", "Détenteur invalide : doit contenir au moins 5 lettres.")
+            return
+
+        montant_txt = self.affichage_random.get().strip()
+        if montant_txt == "":
+            messagebox.showerror("Erreur", "Aucun montant. Appuyez sur Random pour générer un montant.")
+            return
+        try:
+            montant = float(montant_txt)
+            if montant <= 0:
+                raise ValueError()
+        except ValueError:
+            messagebox.showerror("Erreur", "Montant invalide.")
+            return
+
+        cle = (num, det)
+        if cle not in self.comptes:
+            messagebox.showerror("Erreur", "Compte introuvable.")
+            return
+
+        if self.comptes[cle] < montant:
+            messagebox.showerror("Erreur", "Solde insuffisant.")
+            return
+
+        self.comptes[cle] -= montant
+        self.mettre_a_jour_solde_affichage(num, det)
+        messagebox.showinfo("Succès", f"Retrait effectué : {montant:.2f}.\nSolde actuel : {self.comptes[cle]:.2f}")
+
+    def vider(self):
+        num, det = self.obtenir_paire()
+        if not self.valider_numero(num) or not self.valider_detenteur(det):
+            messagebox.showerror("Erreur", "Validez Numéro et Détenteur avant de vider.")
+            return
+        cle = (num, det)
+        if cle not in self.comptes:
+            messagebox.showerror("Erreur", "Compte introuvable.")
+            return
+        self.comptes[cle] = 0.0
+        self.mettre_a_jour_solde_affichage(num, det)
+        messagebox.showinfo("Succès", "Solde remis à 0.00")
+
+    def reset(self):
+        # effacer champs
+        self.entry_num.delete(0, tk.END)
+        self.entry_detenteur.delete(0, tk.END)
+        self.affichage_solde.set("")
+        self.affichage_random.set("")
+        # rétablir radios par défaut
+        self.civ.set("M")
+        # décocher gelé et réactiver contrôles
+        self.variable_gelee.set(False)
+        self.basculer_gelee()
+
     def basculer_gelee(self):
         gelee = self.variable_gelee.get()
-        state = "disabled" if gelee else "normal"
+        etat = "disabled" if gelee else "normal"
+
         for w in self.gelables:
-            try:
-                w.configure(state=state)
-            except tk.TclError:
-                try:
-                    w.configure(state=state)
-                except Exception:
-                    pass
+            # on vérifie d'abord que le widget peut être désactivé
+            if "state" in w.keys():
+                w.configure(state=etat)
 
 
 
