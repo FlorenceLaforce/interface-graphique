@@ -49,68 +49,108 @@ class interface(tk.Tk):
 
     def creer_widgets(self):
 
-        frm = tk.Frame(self)
-        frm.grid(row=0, column=0, sticky="nsew")
+        self.columnconfigure(0, weight=1)
 
-        header = tk.LabelFrame(frm, text="Ajouter un produit")
-        header.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+        self.frm = tk.Frame(self)
+        self.frm.grid(row=0, column=0, sticky="nsew")
+        self.frm.columnconfigure(0, weight=1)
 
-        middle = tk.LabelFrame(frm, text="Gestion de produits")
-        middle.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+        self.header = tk.LabelFrame(self.frm, text="Ajouter un produit")
+        self.header.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+
+        self.middle = tk.LabelFrame(self.frm, text="Gestion de produits")
+        self.middle.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
 
         for i in range(2):
-            middle.rowconfigure(i, weight=1)
+            self.middle.rowconfigure(i, weight=1)
         for i in range(4):
-            middle.columnconfigure(i, weight=1)
+            self.middle.columnconfigure(i, weight=1)
 
-        bottom = tk.Frame(frm)
-        bottom.grid(row=2, column=0, sticky="nsew", padx=8, pady=5)
+        self.bottom = tk.Frame(self.frm)
+        self.bottom.grid(row=2, column=0, sticky="nsew", padx=8, pady=5)
 
-        lbl_prod = tk.Label(header, text="Produit:")
-        lbl_prod.grid(row=0, column=0, sticky="e", padx=8, pady=(8,3))
+        self.lbl_prod = tk.Label(self.header, text="Produit:")
+        self.lbl_prod.grid(row=0, column=0, sticky="e", padx=8, pady=(8,3))
 
-        lbl_quantite = tk.Label(header, text="Quantite:")
-        lbl_quantite.grid(row=1, column=0, sticky="e", padx=8, pady=3)
+        self.lbl_quantite = tk.Label(self.header, text="Quantite:")
+        self.lbl_quantite.grid(row=1, column=0, sticky="e", padx=8, pady=3)
 
-        lbl_prix = tk.Label(header, text="Prix:")
-        lbl_prix.grid(row=2, column=0, sticky="e", padx=5, pady=(3,8))
+        self.lbl_prix = tk.Label(self.header, text="Prix:")
+        self.lbl_prix.grid(row=2, column=0, sticky="e", padx=5, pady=(3,8))
 
-        entry_prod = tk.Entry(header, width=66)
-        entry_prod.grid(row=0, column=1, sticky="nsew", padx=5, pady=(8,3))
+        self.entry_prod = tk.Entry(self.header, width=66)
+        self.entry_prod.grid(row=0, column=1, sticky="nsew", padx=5, pady=(8,3))
 
-        entry_quantite = tk.Entry(header, width=66)
-        entry_quantite.grid(row=1, column=1, sticky="nsew", padx=5, pady=3)
+        self.entry_quantite = tk.Entry(self.header, width=66)
+        self.entry_quantite.grid(row=1, column=1, sticky="nsew", padx=5, pady=3)
 
-        entry_prix = tk.Entry(header, width=66)
-        entry_prix.grid(row=2, column=1, sticky="nsew", padx=5, pady=(3,8))
+        self.entry_prix = tk.Entry(self.header, width=66)
+        self.entry_prix.grid(row=2, column=1, sticky="nsew", padx=5, pady=(3,8))
 
-        bouton = tk.Button(header, text="Ajouter Produit")
-        bouton.grid(row=1, column=2, sticky="nsew", padx=5, pady=3)
+        self.bouton = tk.Button(self.header, text="Ajouter Produit", command=self.ajouter_produits)
+        self.bouton.grid(row=1, column=2, sticky="nsew", padx=5, pady=3)
 
-        btn_sup = tk.Button(middle, text="Supprimer Produit")
-        btn_sup.grid(row=0, column=0, columnspan=2, padx=5, pady=(10,5))
+        self.btn_sup = tk.Button(self.middle, text="Supprimer Produit")
+        self.btn_sup.grid(row=0, column=0, columnspan=2, padx=5, pady=(10,5))
 
-        btn_modif = tk.Button(middle, text="Modifier Produit")
-        btn_modif.grid(row=0, column=2, columnspan=2, padx=5, pady=(10,5))
+        self.btn_modif = tk.Button(self.middle, text="Modifier Produit")
+        self.btn_modif.grid(row=0, column=2, columnspan=2, padx=5, pady=(10,5))
 
-        btn_sauv_csv = tk.Button(middle, text="Sauvegarder CSV ")
-        btn_sauv_csv.grid(row=1, column=0, padx=5, pady=(5,10))
+        self.btn_sauv_csv = tk.Button(self.middle, text="Sauvegarder CSV ")
+        self.btn_sauv_csv.grid(row=1, column=0, padx=5, pady=(5,10))
 
-        btn_sauv_JSON = tk.Button(middle, text="Sauvegarder JSON ")
-        btn_sauv_JSON.grid(row=1, column=1, padx=5, pady=(5,10))
+        self.btn_sauv_JSON = tk.Button(self.middle, text="Sauvegarder JSON ")
+        self.btn_sauv_JSON.grid(row=1, column=1, padx=5, pady=(5,10))
 
-        btn_import_csv = tk.Button(middle, text="Importer CSV ")
-        btn_import_csv.grid(row=1, column=2, padx=5, pady=(5,10))
+        self.btn_import_csv = tk.Button(self.middle, text="Importer CSV ")
+        self.btn_import_csv.grid(row=1, column=2, padx=5, pady=(5,10))
 
-        btn_import_JSON = tk.Button(middle, text="Importer JSON ")
-        btn_import_JSON.grid(row=1, column=3, padx=5, pady=(5,10))
+        self.btn_import_JSON = tk.Button(self.middle, text="Importer JSON ")
+        self.btn_import_JSON.grid(row=1, column=3, padx=5, pady=(5,10))
 
-        tableau = ttk.Treeview(bottom, columns=("Produit", "Quantite", "Prix"), show="headings", selectmode="extended")
-        tableau.heading("Produit", text="Produit")
-        tableau.heading("Quantite", text="Quantite")
-        tableau.heading("Prix", text="Prix")
+        self.tableau = ttk.Treeview(self.bottom, columns=("Produit", "Quantite", "Prix"), show="headings", selectmode="extended")
+        self.tableau.heading("Produit", text="Produit")
+        self.tableau.heading("Quantite", text="Quantite")
+        self.tableau.heading("Prix", text="Prix")
 
-        tableau.grid(row=0, column=0, sticky="nsew")
+        self.tableau.grid(row=0, column=0, sticky="nsew")
+
+    def ajouter_produits(self):
+        nom = self.entry_prod.get()
+        quantite = self.entry_quantite.get()
+        prix = self.entry_prix.get()
+        try:
+            produit = Produit(nom, quantite, prix)
+            self.tableau.insert("", values = (Produit.nom, Produit.quantite, Produit.prix))
+            self.entry_prod.delete(0,"end")
+            self.entry_quantite.delete(0,"end")
+            self.entry_prix.delete(0,"end")
+        except ValueError as e:
+            messagebox.showerror("Erreur", str(e))
+
+    def supprimer_produits(self):
+        selected = self.tableau.selection()
+        if not selected:
+            messagebox.showwarning("selection requise", "veuillez selectionner un produit")
+            return
+        for item in selected:
+            self.tableau.delete(item)
+
+
+    def modifier(self):
+        data = self.tableau.selection()[0]
+        i = self.tableau.item(data)["values"]
+        self.tableau.delete(data)
+        self.entry_prix.delete(0, "end")
+        self.entry_quantite.delete(0, "end")
+        self.entry_prod.delete(0, "end")
+        self.entry_prix.insert(0, i[0])
+        self.entry_quantite.insert(0, i[1])
+        self.entry_prod.insert(0, i[2])
+
+
+
+
 
 
 
