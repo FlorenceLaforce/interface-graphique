@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 
 class interface(tk.Tk):
@@ -78,6 +79,15 @@ class interface(tk.Tk):
         selected_item = self.tableau.selection()
         for item in selected_item:
             self.tableau.delete(item)
+        else:
+            messagebox.showwarning("Avertissement", "Aucun element selectionné")
+
+
+    def exporterJson(self):
+        if not self.rows:
+            messagebox.showinfo("Exporter", "Le fichier n'existe pas")
+            return
+        path = filedialogue
 
 
 if __name__ == "__main__":
